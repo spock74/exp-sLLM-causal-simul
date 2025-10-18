@@ -114,13 +114,3 @@ Ao trabalhar com o projeto no VS Code, você pode encontrar um aviso `reportMiss
       }
     }
     ```
-
----
-
-**Por que isso é importante no README?**
-
-*   **Reprodutibilidade:** Garante que qualquer pessoa que clone seu repositório possa configurar um ambiente funcional rapidamente.
-*   **Documentação de "Conhecimento Tácito":** Transforma os problemas que você resolveu (que são "conhecimento na sua cabeça") em documentação explícita.
-*   **Profissionalismo:** Sinaliza que o projeto é bem mantido e que o autor se preocupa com a experiência de outros desenvolvedores.
-
-Eu recomendo fortemente adicionar esta seção. Ela captura o resultado prático da nossa sessão de depuração.    
