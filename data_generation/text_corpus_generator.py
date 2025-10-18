@@ -4,7 +4,7 @@ import sys
 import os
 import argparse
 import pandas as pd
-from typing import Dict, List, Union
+from typing import Dict, List, Any
 
 # Adiciona o diretório raiz ao path para que possamos importar de 'micro_world'
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -13,16 +13,12 @@ from micro_world.causal_graph import sample
 # --- Templates de Texto ---
 
 # Mapeamentos de valores binários para texto descritivo
-C_MAP: Dict[int, str] = {0: "nenhuma condição pré-existente notável", 1: "uma condição pré-existente relevante"}
-X_MAP: Dict[int, str] = {0: "placebo", 1: "droga experimental"}
-Y_MAP: Dict[int, str] = {0: "nível normal de biomarcador", 1: "nível elevado de biomarcador"}
-Z_MAP: Dict[int, str] = {0: "uma recuperação completa", 1: "não apresentou recuperação"}
+C_MAP = {0: "nenhuma condição pré-existente notável", 1: "uma condição pré-existente relevante"}
+X_MAP = {0: "placebo", 1: "droga experimental"}
+Y_MAP = {0: "nível normal de biomarcador", 1: "nível elevado de biomarcador"}
+Z_MAP = {0: "uma recuperação completa", 1: "não apresentou recuperação"}
 
-# Type aliases for clarity
-PatientData = Dict[str, int]
-FormattedEntry = Dict[str, Union[str, int]]
-
-def format_observational(patient_id: int, data_point: PatientData) -> FormattedEntry:
+def format_observational(patient_id: int, data_point: Dict[str, int]) -> Dict[str, Any]:
     """Formata um ponto de dados como uma frase de relatório observacional."""
     text = (
         f"Relatório do Paciente {patient_id}: O histórico do paciente indica "
@@ -36,7 +32,7 @@ def format_observational(patient_id: int, data_point: PatientData) -> FormattedE
         **data_point # Adiciona as colunas C, X, Y, Z
     }
 
-def format_interventional(trial_id: int, data_point: PatientData) -> FormattedEntry:
+def format_interventional(trial_id: int, data_point: Dict[str, int]) -> Dict[str, Any]:
     """Formata um ponto de dados como uma frase de ensaio clínico (intervenção)."""
     text = (
         f"Registro do Estudo Clínico RCT{trial_id}: O participante, que apresentava "
@@ -50,7 +46,7 @@ def format_interventional(trial_id: int, data_point: PatientData) -> FormattedEn
         **data_point
     }
 
-def generate_corpus(num_samples: int, interventional_ratio: float, output_path: str):
+def generate_corpus(num_samples: int, interventional_ratio: float, output_path: str) -> None:
     """
     Gera um corpus de texto e o salva como um arquivo CSV.
 
@@ -59,26 +55,25 @@ def generate_corpus(num_samples: int, interventional_ratio: float, output_path: 
         interventional_ratio: A proporção de sentenças que devem ser do tipo "intervencional".
         output_path: O caminho para salvar o arquivo CSV de saída.
     """
-    print(f"Gerando corpus com {num_samples} amostras (intervencional_ratio={interventional_ratio}) ...")
+    print(f"Gerando corpus com {num_samples} amostras...")
     
-    # 1. Gera todos os dados brutos de uma vez de forma vetorizada
-    df_raw = sample(num_samples=num_samples)
-    
-    # 2. Formata as linhas para texto
+    corpus_data: List[Dict[str, Any]] = []
     num_interventional = int(num_samples * interventional_ratio)
-    corpus_list: List[FormattedEntry] = []
     
-    for i, row in df_raw.iterrows():
-        data_point: PatientData = row.to_dict()
-        if i < num_interventional:  
-            # Formata as primeiras N linhas como intervencionais
-            corpus_list.append(format_interventional(i + 1, data_point))
-        else:
-            # Formata o restante como observacional
-            corpus_list.append(format_observational(i + 1, data_point))
+    # Gerar dados intervencionais
+    for i in range(num_interventional):
+        data_point = sample(1).to_dict('records')[0]
+        formatted_entry = format_interventional(i + 1, data_point)
+        corpus_data.append(formatted_entry)
         
-    # 3. Cria o DataFrame final e embaralha
-    df = pd.DataFrame(corpus_list)
+    # Gerar dados observacionais
+    for i in range(num_samples - num_interventional):
+        data_point = sample(1).to_dict('records')[0]
+        formatted_entry = format_observational(i + 1, data_point)
+        corpus_data.append(formatted_entry)
+        
+    # Criar um DataFrame e salvar como CSV
+    df = pd.DataFrame(corpus_data)
     # Embaralhar as linhas para misturar os tipos de dados
     df = df.sample(frac=1).reset_index(drop=True)
     

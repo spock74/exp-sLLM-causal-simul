@@ -9,7 +9,7 @@ class HopfieldNetwork:
     Funciona como uma memória associativa para armazenar e recuperar padrões.
     No nosso caso, os 'padrões' são as estruturas de grafos causais.
     """
-    def __init__(self, num_neurons: int):
+    def __init__(self, num_neurons: int) -> None:
         """
         Inicializa a rede.
         Args:
@@ -20,7 +20,7 @@ class HopfieldNetwork:
         # A matriz de pesos, que armazenará a memória da rede.
         self.weights = np.zeros((num_neurons, num_neurons))
 
-    def train(self, patterns: List[np.ndarray]):
+    def train(self, patterns: List[np.ndarray]) -> None:
         """
         Treina a rede usando a regra de Hebb para armazenar os padrões fornecidos.
         Os padrões devem ser vetores com valores bipolares {-1, 1}.

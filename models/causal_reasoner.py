@@ -3,7 +3,7 @@
 import torch
 from transformers import AutoTokenizer, AutoModelForCausalLM, PreTrainedModel, PreTrainedTokenizer
 from peft import PeftModel
-from typing import cast, Tuple, Dict
+from typing import cast, Tuple
 import numpy as np
 
 # Usaremos a mesma arquitetura de modelo base para consistência.
