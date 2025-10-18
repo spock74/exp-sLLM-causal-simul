@@ -1,4 +1,24 @@
-# **Causal Swarm POC: Um Experimento em Cognição Causal Emergente**
+# Causal Swarm PoC
+
+This repo is a proof-of-concept for experimenting with a new AI architecture designed to embed causal reasoning capabilities into (small) Large Language Models (sLLMs). The project's core hypothesis is that a "swarm" of smaller, specialized sLLMs can learn an underlying causal structure from text data more effectively than a single, large LLM.
+
+The architecture is composed of four main components:
+
+1.  **`micro_world`**: This module defines a "ground truth" causal model using a Directed Acyclic Graph (DAG). It represents a simplified medical scenario with four variables and serves as the basis for data generation and evaluation.
+
+2.  **`data_generation`**: This component generates a corpus of text in natural language that simulates observational and interventional data from the `micro_world`. This text is the input for the AI models.
+
+3.  **`models` (The "AI Swarm")**: This is the core of the architecture and consists of three parts:
+    *   **Fact Extractor (LLM1)**: A small, fine-tuned LLM responsible for extracting structured data (in JSON format) from the natural language text.
+    *   **Hopfield Network (Causal Workspace)**: An associative memory that stores different causal hypotheses (as graph structures). It takes the output of the Fact Extractor and settles on the most likely causal structure.
+    *   **Causal Reasoner (LLM2)**: Another small LLM that receives a user's question and the current causal hypothesis from the Hopfield Network to generate an answer in natural language.
+
+4.  **`training`**: This module orchestrates the training of the entire system. The plan is to use a hybrid loss function that combines a standard language model loss with a causal loss, although this part is not fully implemented yet.
+
+In essence, this repository is an experiment to build a more robust causal reasoning system by decomposing the problem into specialized modules. It aims to go beyond the superficial correlations that large LLMs often learn and instead capture the deeper causal relationships described in the data.
+
+
+# **Causal Swarm PoC: Um Experimento em Cognição Causal Emergente**
 
 Este repositório contém o código para uma Prova de Conceito (PoC) que explora uma nova arquitetura para embutir raciocínio causal em Modelos de Linguagem Grandes (LLMs). O projeto testa a hipótese de que um ecossistema de LLMs pequenos e especializados, interconectados por redes de memória associativa e guiados por uma função de custo causal-bayesiana, pode aprender uma estrutura causal subjacente a partir de dados textuais, superando a tendência dos LLMs monolíticos de aprenderem apenas correlações superficiais.
 
@@ -107,10 +127,13 @@ Ao trabalhar com o projeto no VS Code, você pode encontrar um aviso `reportMiss
 2.  Dentro de `.vscode`, crie um arquivo `settings.json`.
 3.  Adicione a seguinte configuração para silenciar o aviso:
 
-    ```json
-    {
-      "python.analysis.diagnosticSeverityOverrides": {
-        "reportMissingTypeStubs": "none"
-      }
+```json
+{
+    "python.analysis.diagnosticSeverityOverrides": {
+        "reportMissingTypeStubs": "none",
+        "reportUnknownVariableType": "none",
+        "reportUnknownMemberType": "none",
+        "reportPrivateImportUsage": "none" // <--- ESTA REGRA JÁ RESOLVE ISSO
     }
-    ```
+}
+```
