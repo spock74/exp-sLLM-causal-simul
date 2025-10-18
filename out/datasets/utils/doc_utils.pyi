@@ -1,3 +1,0 @@
-from typing import Callable
-
-def is_documented_by(function_with_docstring: Callable): ...
