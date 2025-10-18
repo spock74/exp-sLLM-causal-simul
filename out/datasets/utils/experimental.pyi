@@ -1,0 +1,3 @@
+from typing import Callable
+
+def experimental(fn: Callable) -> Callable: ...

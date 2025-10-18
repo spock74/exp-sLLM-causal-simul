@@ -1,0 +1,51 @@
+# Arquivos de cache e bytecode do Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Arquivos de distribuição/build
+build/
+dist/
+*.egg-info/
+
+# Ambientes virtuais
+.env
+.venv
+env/
+venv/
+
+# Ambientes Conda (é melhor compartilhar o arquivo environment.yml)
+/dokausal_dev/
+/kausal_env/
+
+# Configurações de IDE e editores
+# Geralmente é melhor compartilhar um settings.json recomendado no README
+# do que forçar configurações no repositório.
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Arquivos específicos do sistema operacional
+.DS_Store
+Thumbs.db
+
+# Relatórios de teste e cobertura
+.coverage
+.pytest_cache/
+htmlcov/
+
+# --- Arquivos Específicos do Projeto KAUSAL ---
+
+# Dados gerados (o script `text_corpus_generator.py` os cria)
+/data/
+
+# Modelos treinados (são grandes e gerados pelos scripts de treinamento)
+/models/*_finetuned/
+
+# Logs e arquivos temporários
+*.log
+
+.mypy_cache/
+.mypy_*

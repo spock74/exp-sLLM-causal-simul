@@ -1,0 +1,19 @@
+from .download.download_config import DownloadConfig as DownloadConfig
+from .download.download_manager import DownloadMode as DownloadMode
+from .download.streaming_download_manager import StreamingDownloadManager as StreamingDownloadManager
+from .info import DatasetInfo as DatasetInfo
+from .load import dataset_module_factory as dataset_module_factory, get_dataset_builder_class as get_dataset_builder_class, load_dataset_builder as load_dataset_builder
+from .utils.logging import get_logger as get_logger
+from .utils.version import Version as Version
+from _typeshed import Incomplete
+from collections.abc import Mapping, Sequence
+
+logger: Incomplete
+
+class SplitsNotFoundError(ValueError): ...
+
+def get_dataset_infos(path: str, data_files: dict | list | str | None = None, download_config: DownloadConfig | None = None, download_mode: DownloadMode | str | None = None, revision: str | Version | None = None, token: bool | str | None = None, **config_kwargs): ...
+def get_dataset_config_names(path: str, revision: str | Version | None = None, download_config: DownloadConfig | None = None, download_mode: DownloadMode | str | None = None, data_files: dict | list | str | None = None, **download_kwargs): ...
+def get_dataset_default_config_name(path: str, revision: str | Version | None = None, download_config: DownloadConfig | None = None, download_mode: DownloadMode | str | None = None, data_files: dict | list | str | None = None, **download_kwargs) -> str | None: ...
+def get_dataset_config_info(path: str, config_name: str | None = None, data_files: str | Sequence[str] | Mapping[str, str | Sequence[str]] | None = None, download_config: DownloadConfig | None = None, download_mode: DownloadMode | str | None = None, revision: str | Version | None = None, token: bool | str | None = None, **config_kwargs) -> DatasetInfo: ...
+def get_dataset_split_names(path: str, config_name: str | None = None, data_files: str | Sequence[str] | Mapping[str, str | Sequence[str]] | None = None, download_config: DownloadConfig | None = None, download_mode: DownloadMode | str | None = None, revision: str | Version | None = None, token: bool | str | None = None, **config_kwargs): ...
